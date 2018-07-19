@@ -1,0 +1,1 @@
+CREATE SCHEMA `gobar-dev` DEFAULT CHARACTER SET utf8mb4;
