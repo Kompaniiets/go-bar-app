@@ -4,7 +4,7 @@ const logger = require('./server/utils/logger');
 const app = require('./server');
 
 const serverStartCallback = () => {
-    logger.log('info', `Web server successfully started at port ${config.server.port}`);
+    logger.info(`Web server successfully started at port ${config.server.port}`);
 };
 
 http.createServer(app)

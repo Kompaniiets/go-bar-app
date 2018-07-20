@@ -1,29 +1,29 @@
-const winston = require('winston');
-const config = require('winston/lib/winston/config');
+const { format, transports } = require('winston');
+const { combine, timestamp, printf, colorize } = format;
+const _ = require('lodash');
+
+const excludeItems = [
+    'timestamp',
+    'level',
+    'message'
+];
+
+const myFormat = printf(info => {
+    const otherInfo = _.omit(info, excludeItems);
+    return `[${info.timestamp}] [${info.level}]: ${info.message || ''} ${Object.keys(otherInfo).length ? JSON.stringify(otherInfo) : ''}`;
+});
 
 module.exports = [
-    new (winston.transports.Console)({
-        timestamp() {
-            return new Date().toISOString();
-        },
-        colorize: true,
-        formatter(options) {
-            const message = (undefined !== options.message) ? options.message :
-                options.meta.message;
-            const stack = options.meta && options.meta.stack ? options.meta.stack : '';
-            let meta = '';
-            if (options.meta && Object.keys(options.meta).length) {
-                delete options.meta.stack;
-                meta = JSON.stringify(options.meta);
-            }
-
-            return `[${config.colorize(options.level, options.timestamp())}] - ${
-                config.colorize(options.level, options.level.toUpperCase())}: ${
-                message
-                } ${
-                meta
-                } ${
-                stack}`;
-        },
-    }),
+    new transports.Console({
+        format: combine(
+            format(info => {
+                info.level = info.level.toUpperCase();
+                return info;
+            })(),
+            timestamp(),
+            colorize({
+                all: true
+            }),
+            myFormat)
+    })
 ];

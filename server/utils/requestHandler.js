@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
         if (!err && isFile) {
             next();
         } else {
-            logger.log('info', 'request', {
+            logger.info('Request', {
                 headers: req.headers,
                 method: req.method,
                 url: req.url,
@@ -23,11 +23,9 @@ module.exports = (req, res, next) => {
             // Time the request
             const start = new Date();
 
-            // due to res.on('header', ...) is deprecated in express 4.*
-            // we use module 'on-headers'
             require('on-headers')(res, () => {
                 const end = new Date();
-                logger.log('info', 'response time', {
+                logger.info('Response time', {
                     start: start.getTime(),
                     end: end.getTime(),
                     duration: end.getTime() - start.getTime(),

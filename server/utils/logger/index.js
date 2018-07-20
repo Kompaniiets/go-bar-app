@@ -1,7 +1,7 @@
-const winston = require('winston');
+const { createLogger } = require('winston');
 const transports = require('./transports');
 
-const logger = winston.createLogger({
+const logger = createLogger({
     transports,
     exitOnError: false,
 });
