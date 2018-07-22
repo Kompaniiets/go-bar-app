@@ -1,4 +1,4 @@
-const Cache = require('./redis');
+// const Cache = require('./redis');
 const jwt = require('jsonwebtoken');
 const config = require('./../../config');
 
