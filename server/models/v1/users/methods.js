@@ -6,11 +6,11 @@ module.exports = {
     tableName: 'users',
     hooks: {
         beforeCreate: (user) => {
-            user.createdAt = createdAtDate.createdAt();
-            user.updatedAt = createdAtDate.createdAt();
+            user.createdAt = createdAtDate;
+            user.updatedAt = createdAtDate;
         },
         beforeUpdate: (user) => {
-            user.updatedAt = createdAtDate.createdAt();
+            user.updatedAt = createdAtDate;
         }
     },
 

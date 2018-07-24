@@ -1,20 +1,21 @@
 const Controller = require('./../../utils/controller');
 const Models = require('../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
-const config = require('./../../../config');
 
 class UsersController extends Controller {
     constructor(version) {
         super(version);
         this.test = [this.testAction];
-        this.login = [
-            this.loginUser
+        this.register = [
+            this.validator.users.register,
+            this.middlewares.users.saveUser,
+            this.middlewares.common.sendResponse
         ];
-    }
-
-    loginUser(req, res, next) {
-        console.log(req.body);
-        return res.send({ message: req.body });
+        this.login = [
+            // this.validator.users.login,
+            this.middlewares.users.findUserByEmail,
+            this.middlewares.common.sendResponse
+        ];
     }
 
     /**
@@ -25,7 +26,7 @@ class UsersController extends Controller {
      * @private
      */
     testAction(req, res) {
-        return res.send({ message: 'test!' });
+        return res.send('test');
     }
 }
 

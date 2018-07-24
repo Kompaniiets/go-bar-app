@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) => ({
     },
     email: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     firstName: {
         type: Sequelize.STRING,
@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => ({
     },
     barName: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     phone: {
         type: Sequelize.STRING,

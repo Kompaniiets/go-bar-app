@@ -4,9 +4,8 @@ const CONSTANTS = require('./../../constants');
 const Joi = require('joi');
 
 class UsersValidator extends BaseValidator {
-
     /**
-     * User registration
+     * Check user registration
      * @param req
      * @param res
      * @param next
@@ -74,15 +73,57 @@ class UsersValidator extends BaseValidator {
                     },
                 })
                 .required(),
-            confirmPassword: Joi.any().valid(Joi.ref('password'))
+            // confirmPassword: Joi.any().valid(Joi.ref('password'))
+            //     .required()
+            //     .options({
+            //         language: {
+            //             any: {
+            //                 allowOnly: '!!Repeat password doesn’t match password!',
+            //             },
+            //         },
+            //     }),
+        }, req, res, next);
+    }
+
+    /**
+     * Check user login
+     * @param req
+     * @param res
+     * @param next
+     */
+    static login(req, res, next) {
+        super.validate({
+            email: Joi.string()
+                .email()
                 .required()
+                .max(129)
+                .regex(CONSTANTS.REGEXP.WITHOUT_LATIN_CHAR)
                 .options({
                     language: {
-                        any: {
-                            allowOnly: '!!Repeat password doesn’t match password!',
+                        string: {
+                            email: CONSTANTS.ERROR_MESSAGES.LOGIN_VALIDATION,
+                            regex: {
+                                base: CONSTANTS.ERROR_MESSAGES.LOGIN_VALIDATION,
+                            },
                         },
                     },
                 }),
+            password: Joi.string()
+                .min(6)
+                .max(50)
+                .regex(CONSTANTS.REGEXP.PASSWORD_VALIDATION)
+                .options({
+                    language: {
+                        string: {
+                            max: CONSTANTS.ERROR_MESSAGES.LOGIN_VALIDATION,
+                            min: CONSTANTS.ERROR_MESSAGES.LOGIN_VALIDATION,
+                            regex: {
+                                base: CONSTANTS.ERROR_MESSAGES.LOGIN_VALIDATION,
+                            },
+                        },
+                    },
+                })
+                .required(),
         }, req, res, next);
     }
 }
