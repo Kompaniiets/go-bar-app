@@ -41,6 +41,10 @@ class UsersMiddleware {
         Models.users.create(req.body)
             .then((user) => {
                 req.user = user;
+                req.responseMessage = {
+                    email: user.email,
+                    id: user.id
+                };
                 return next();
             })
             .catch((err) => {

@@ -5,12 +5,12 @@ const Joi = require('joi');
 
 class UsersValidator extends BaseValidator {
     /**
-     * Check user registration
+     * Validate user registration
      * @param req
      * @param res
      * @param next
      */
-    static register(req, res, next) {
+    static registerUser(req, res, next) {
         super.validate({
             firstName: Joi.string()
                 .max(30)
@@ -64,6 +64,7 @@ class UsersValidator extends BaseValidator {
             password: Joi.string()
                 .min(6)
                 .max(50)
+                .regex(CONSTANTS.REGEXP.PASSWORD_VALIDATION)
                 .options({
                     language: {
                         string: {
@@ -73,15 +74,75 @@ class UsersValidator extends BaseValidator {
                     },
                 })
                 .required(),
-            // confirmPassword: Joi.any().valid(Joi.ref('password'))
-            //     .required()
-            //     .options({
-            //         language: {
-            //             any: {
-            //                 allowOnly: '!!Repeat password doesn’t match password!',
-            //             },
-            //         },
-            //     }),
+            confirmPassword: Joi.any().valid(Joi.ref('password'))
+                .required()
+                .options({
+                    language: {
+                        any: {
+                            allowOnly: '!!Repeat password doesn’t match password!',
+                        },
+                    },
+                }),
+            isBar: Joi.boolean().required()
+        }, req, res, next);
+    }
+
+    /**
+     * Validate bar registration
+     * @param req
+     * @param res
+     * @param next
+     */
+    static registerBar(req, res, next) {
+        super.validate({
+            barName: Joi.string()
+                .max(50)
+                .required()
+                .trim()
+                .replace(CONSTANTS.REGEXP.MULTI_SPACE_TRIM, ' '),
+            phone: Joi.string()
+                .regex(CONSTANTS.REGEXP.PHONE)
+                .required()
+                .trim()
+                .replace(CONSTANTS.REGEXP.MULTI_SPACE_TRIM, ' '),
+            email: Joi.string()
+                .email()
+                .required()
+                .max(129)
+                .regex(CONSTANTS.REGEXP.WITHOUT_LATIN_CHAR)
+                .options({
+                    language: {
+                        string: {
+                            email: CONSTANTS.ERROR_MESSAGES.EMAIL_VALIDATION,
+                            regex: {
+                                base: CONSTANTS.ERROR_MESSAGES.EMAIL_VALIDATION,
+                            },
+                        },
+                    },
+                }),
+            password: Joi.string()
+                .min(6)
+                .max(50)
+                .regex(CONSTANTS.REGEXP.PASSWORD_VALIDATION)
+                .options({
+                    language: {
+                        string: {
+                            max: CONSTANTS.ERROR_MESSAGES.MAX_PASSWORD_LENGTH,
+                            min: CONSTANTS.ERROR_MESSAGES.MIN_PASSWORD_LENGTH,
+                        },
+                    },
+                })
+                .required(),
+            confirmPassword: Joi.any().valid(Joi.ref('password'))
+                .required()
+                .options({
+                    language: {
+                        any: {
+                            allowOnly: '!!Repeat password doesn’t match password!',
+                        },
+                    },
+                }),
+            isBar: Joi.boolean().required()
         }, req, res, next);
     }
 

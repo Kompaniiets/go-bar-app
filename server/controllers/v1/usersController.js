@@ -6,16 +6,27 @@ class UsersController extends Controller {
     constructor(version) {
         super(version);
         this.test = [this.testAction];
-        this.register = [
-            this.validator.users.register,
+        this.signup = [
+            this.validateSignup,
             this.middlewares.users.saveUser,
             this.middlewares.common.sendResponse
         ];
         this.login = [
-            // this.validator.users.login,
+            this.validator.users.login,
             this.middlewares.users.findUserByEmail,
             this.middlewares.common.sendResponse
         ];
+    }
+
+    validateSignup(req, res, next) {
+        if (req.body.isBar === false) {
+            return this.validator.users.registerUser(req, res, next);
+        }
+        if (req.body.isBar === true) {
+            return this.validator.users.registerUser(req, res, next);
+        }
+
+        return next(ErrorFactory.validationError('isBar flag missing!'));
     }
 
     /**

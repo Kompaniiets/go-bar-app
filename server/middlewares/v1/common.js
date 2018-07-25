@@ -1,5 +1,4 @@
 const CONSTANTS = require('../../constants');
-const ErrorFactory = require('../../utils/errors');
 
 class CommonMiddlewares {
     static sendResponse(req, res, next) {
