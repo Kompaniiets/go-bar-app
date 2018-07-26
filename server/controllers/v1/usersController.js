@@ -1,5 +1,4 @@
 const Controller = require('./../../utils/controller');
-const Models = require('../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
 
 class UsersController extends Controller {
@@ -8,12 +7,18 @@ class UsersController extends Controller {
         this.test = [this.testAction];
         this.signup = [
             this.validateSignup,
+            this.middlewares.users.encryptPassword,
             this.middlewares.users.saveUser,
+            this.middlewares.users.findUserByEmail,
+            this.middlewares.users.basicResponse,
             this.middlewares.common.sendResponse
         ];
         this.login = [
             this.validator.users.login,
             this.middlewares.users.findUserByEmail,
+            this.middlewares.users.comparePassword,
+            this.middlewares.users.login,
+            this.middlewares.users.basicResponse,
             this.middlewares.common.sendResponse
         ];
     }
@@ -23,7 +28,7 @@ class UsersController extends Controller {
             return this.validator.users.registerUser(req, res, next);
         }
         if (req.body.isBar === true) {
-            return this.validator.users.registerUser(req, res, next);
+            return this.validator.users.registerBar(req, res, next);
         }
 
         return next(ErrorFactory.validationError('isBar flag missing!'));

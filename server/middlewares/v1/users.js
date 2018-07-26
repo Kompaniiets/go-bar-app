@@ -1,8 +1,72 @@
 const Models = require('./../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
 const CONSTANTS = require('./../../constants');
+const Password = require('../../helpers/password');
 
 class UsersMiddleware {
+    /**
+     * Basic user response
+     * @param req
+     * @param res
+     * @param next
+     */
+    static basicResponse(req, res, next) {
+        try {
+            if (!req.userModel.isBar) {
+                req.responseMessage = Models.users.format().baseUser(req.userModel);
+                return next();
+            }
+
+            req.responseMessage = Models.users.format().baseBar(req.userModel);
+            return next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    /**
+     * Encrypt user password using salt
+     * @param req
+     * @param res
+     * @param next
+     * @returns {*}
+     */
+    static encryptPassword(req, res, next) {
+        req.body.salt = Password.generateSalt();
+        res.locals.rawPassword = req.body.password;
+        req.body.password = Password.hash(req.body.password + req.body.salt);
+        return next();
+    }
+
+    /**
+     * Compare user password
+     * @param req
+     * @param res
+     * @param next
+     * @returns {*}
+     */
+    static comparePassword(req, res, next) {
+        if (!Password.compare(req.body.password + req.userModel.salt, req.userModel.password)) {
+            return next(ErrorFactory.forbiddenError(CONSTANTS.ERROR_MESSAGES.AUTHORIZATION_FAILED));
+        }
+
+        return next();
+    }
+
+    static login(req, res, next) {
+        this.createUserToken(req.userModel)
+            .then((user) => {
+                req.userModel.token = user.token;
+                req.userModel.refreshToken = user.refreshToken;
+                req.userModel.lifeTime = user.lifeTime;
+                return req.userModel.save().then(() => {
+                    req.responseMessage = req.userModel;
+                    return next();
+                });
+            })
+            .catch(next);
+    }
+
     /**
      * Check user exist by email
      * @param req
@@ -15,14 +79,17 @@ class UsersMiddleware {
                 email: req.body.email
             }
         }).then((user) => {
-            if (!user)
-                return next(ErrorFactory.notFound('User not found'));
+            if (!user) {
+                return next(ErrorFactory.notFound(
+                    CONSTANTS.ERROR_MESSAGES.INVALID_EMAIL,
+                    [CONSTANTS.ERROR_MESSAGES.PATH_EMAIL], {
+                        generalErrorMessage: CONSTANTS.ERROR_MESSAGES.INVALID_EMAIL,
+                    }));
+            }
 
             req.user = user;
-            req.responseMessage = {
-                email: user.email,
-                id: user.id
-            };
+            req.userModel = user;
+            req.responseMessage = user;
             return next();
         }).catch(next);
     }
@@ -34,19 +101,10 @@ class UsersMiddleware {
      * @param next
      */
     static saveUser(req, res, next) {
-        req.body.isBar = false;
-        req.body.salt = 'sdfs324dsg4tqweg';
         req.body.isVerified = true;
 
         Models.users.create(req.body)
-            .then((user) => {
-                req.user = user;
-                req.responseMessage = {
-                    email: user.email,
-                    id: user.id
-                };
-                return next();
-            })
+            .then(() => next())
             .catch((err) => {
                 if (err.errors && err.errors.length > 0
                     && err.errors[0].type === CONSTANTS.ERROR_MESSAGES.UNIQUE_VIOLATION) {

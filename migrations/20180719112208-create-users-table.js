@@ -6,9 +6,9 @@ module.exports = {
             CREATE TABLE users (
             id INT(11) NOT NULL AUTO_INCREMENT,
             email VARCHAR(150) NOT NULL,
-            firstName VARCHAR(30) NOT NULL,
-            lastName VARCHAR(30) NOT NULL,
-            barName VARCHAR(50) DEFAULT NULL,
+            firstName VARCHAR(30) NULL DEFAULT '',
+            lastName VARCHAR(30) NULL DEFAULT '',
+            barName VARCHAR(50) NULL DEFAULT '',
             phone varchar(40) NULL DEFAULT '',
             password VARCHAR(256) NOT NULL,
             salt VARCHAR(256) NOT NULL,

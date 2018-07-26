@@ -17,7 +17,9 @@ module.exports = {
     MAX_PASSWORD_LENGTH: '!!Maximal length: 50 characters.',
     EMAIL_VALIDATION: '!!Please enter a valid email.',
     EMAIL_TAKEN: 'Email already being used',
+    INVALID_EMAIL: 'Email address is not registered',
     UNIQUE_VIOLATION: 'unique violation',
     PATH_EMAIL: 'email',
     LOGIN_VALIDATION: '!!Invalid email address or password.',
+    AUTHORIZATION_FAILED: 'Invalid email address or password',
 };
