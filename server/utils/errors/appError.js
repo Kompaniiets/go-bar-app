@@ -40,24 +40,10 @@ class AppError extends Error {
             code: this.generalErrorCode,
             message: this.message,
             errors: this.errors.map((item) => {
-                let message;
-                let code;
-                let key;
-
-                if (item.details) {
-                    code = item.details[0].code[0];
-                    message = item.details[0].message;
-                    key = item.details[0].path[0];
-                } else {
-                    code = this.code;
-                    message = this.message;
-                    key = '';
-                }
-
                 return {
-                    code,
-                    message,
-                    key,
+                    code: item.code,
+                    message: item.message,
+                    key: item.key,
                 };
             }),
         };

@@ -53,6 +53,12 @@ class UsersMiddleware {
         return next();
     }
 
+    /**
+     * Create access and refresh token on user login
+     * @param req
+     * @param res
+     * @param next
+     */
     static login(req, res, next) {
         this.createUserToken(req.userModel)
             .then((user) => {
@@ -82,9 +88,8 @@ class UsersMiddleware {
             if (!user) {
                 return next(ErrorFactory.notFound(
                     CONSTANTS.ERROR_MESSAGES.INVALID_EMAIL,
-                    [CONSTANTS.ERROR_MESSAGES.PATH_EMAIL], {
-                        generalErrorMessage: CONSTANTS.ERROR_MESSAGES.INVALID_EMAIL,
-                    }));
+                    CONSTANTS.ERROR_MESSAGES.PATH_EMAIL
+                ));
             }
 
             req.user = user;
@@ -110,7 +115,8 @@ class UsersMiddleware {
                     && err.errors[0].type === CONSTANTS.ERROR_MESSAGES.UNIQUE_VIOLATION) {
                     return next(ErrorFactory.unprocessedError(
                         CONSTANTS.ERROR_MESSAGES.EMAIL_TAKEN,
-                        [CONSTANTS.ERROR_MESSAGES.PATH_EMAIL]));
+                        CONSTANTS.ERROR_MESSAGES.PATH_EMAIL
+                    ));
                 }
                 return next(err);
             });

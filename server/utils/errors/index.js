@@ -2,147 +2,143 @@ const AppError = require('./appError');
 const constants = require('./../../constants');
 
 class Errors {
-    static approximateErrorTypes(errorMessage, path = [], code) {
+    static approximateErrorTypes(errorMessage, key, code) {
         if ((errorMessage instanceof Object) && errorMessage.name === 'AssertionError') {
             throw new Error('Joi validation error');
         }
 
         if ((errorMessage instanceof Object) && errorMessage.isJoi) {
             return [{
-                details: [{
-                    message: errorMessage.details[0].message,
-                    path: [errorMessage.details[0].path[0]],
-                    code: [code],
-                }],
+                message: errorMessage.details[0].message,
+                key: errorMessage.details[0].path[0],
+                code: code,
             }];
         }
 
         return [{
-            details: [{
-                message: errorMessage,
-                path: path[0] ? [path[0]] : [''],
-                code: path[1] ? [path[1]] : [code],
-            }],
+            message: errorMessage,
+            key: key || '',
+            code: code || '',
         }];
     }
 
-    static validationError(generalErrorMessage, path = [], options = {}) {
+    static validationError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.BAD_REQUEST,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.VALIDATOR_ERROR,
-            errorCode: options.errorCode || constants.STATUS_CODES.BAD_REQUEST,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.BAD_REQUEST),
-            status: options.status || constants.STATUS_CODES.BAD_REQUEST,
+            generalErrorCode: constants.STATUS_CODES.BAD_REQUEST,
+            generalErrorMessage: constants.ERROR_MESSAGES.VALIDATOR_ERROR,
+            errorCode: customErrorCode || constants.STATUS_CODES.BAD_REQUEST,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.BAD_REQUEST),
+            status: constants.STATUS_CODES.BAD_REQUEST,
         });
     }
 
-    static databaseError(generalErrorMessage, path = [], options = {}) {
+    static databaseError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.INTERNAL_ERROR,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.DATABASE_ERROR,
-            errorCode: options.errorCode || constants.STATUS_CODES.DATABASE_ERROR,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.NOT_IMPLEMENTED),
-            status: options.status || constants.STATUS_CODES.INTERNAL_ERROR,
+            generalErrorCode: constants.STATUS_CODES.INTERNAL_ERROR,
+            generalErrorMessage: constants.ERROR_MESSAGES.DATABASE_ERROR,
+            errorCode: customErrorCode || constants.STATUS_CODES.DATABASE_ERROR,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.NOT_IMPLEMENTED),
+            status: constants.STATUS_CODES.INTERNAL_ERROR,
         });
     }
 
-    static notFound(generalErrorMessage = constants.ERROR_MESSAGES.NOT_FOUND_ERROR, path = [], options = {}) {
+    static notFound(generalErrorMessage = constants.ERROR_MESSAGES.NOT_FOUND_ERROR, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.NOT_FOUND,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.NOT_FOUND_ERROR,
-            errorCode: options.errorCode || constants.STATUS_CODES.NOT_FOUND,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.NOT_FOUND),
-            status: options.status || constants.STATUS_CODES.NOT_FOUND,
+            generalErrorCode: constants.STATUS_CODES.NOT_FOUND,
+            generalErrorMessage: constants.ERROR_MESSAGES.NOT_FOUND_ERROR,
+            errorCode: customErrorCode || constants.STATUS_CODES.NOT_FOUND,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.NOT_FOUND),
+            status: constants.STATUS_CODES.NOT_FOUND,
         });
     }
 
-    static notImplemented(generalErrorMessage = constants.ERROR_MESSAGES.NOT_IMPLEMENTED_ERROR, path = [], options = {}) {
+    static notImplemented(generalErrorMessage = constants.ERROR_MESSAGES.NOT_IMPLEMENTED_ERROR, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.NOT_IMPLEMENTED,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.NOT_IMPLEMENTED_ERROR,
-            errorCode: options.errorCode || constants.STATUS_CODES.NOT_IMPLEMENTED,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.NOT_IMPLEMENTED),
-            status: options.status || constants.STATUS_CODES.NOT_IMPLEMENTED,
+            generalErrorCode: constants.STATUS_CODES.NOT_IMPLEMENTED,
+            generalErrorMessage: constants.ERROR_MESSAGES.NOT_IMPLEMENTED_ERROR,
+            errorCode: customErrorCode || constants.STATUS_CODES.NOT_IMPLEMENTED,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.NOT_IMPLEMENTED),
+            status: constants.STATUS_CODES.NOT_IMPLEMENTED,
         });
     }
 
-    static internalServerError(generalErrorMessage, path = [], options = {}) {
+    static internalServerError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.INTERNAL_ERROR,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.INTERNAL_ERROR,
-            errorCode: options.errorCode || constants.STATUS_CODES.INTERNAL_ERROR,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.INTERNAL_ERROR),
-            status: options.status || constants.STATUS_CODES.INTERNAL_ERROR,
+            generalErrorCode: constants.STATUS_CODES.INTERNAL_ERROR,
+            generalErrorMessage: constants.ERROR_MESSAGES.INTERNAL_ERROR,
+            errorCode: customErrorCode || constants.STATUS_CODES.INTERNAL_ERROR,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.INTERNAL_ERROR),
+            status: constants.STATUS_CODES.INTERNAL_ERROR,
         });
     }
 
-    static unauthorizedError(generalErrorMessage, path = [], options = {}) {
+    static unauthorizedError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.UNAUTHORIZED,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.UNAUTHORIZED,
-            errorCode: options.errorCode || constants.STATUS_CODES.UNAUTHORIZED,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.UNAUTHORIZED),
-            status: options.status || constants.STATUS_CODES.UNAUTHORIZED,
+            generalErrorCode: constants.STATUS_CODES.UNAUTHORIZED,
+            generalErrorMessage: constants.ERROR_MESSAGES.UNAUTHORIZED,
+            errorCode: customErrorCode || constants.STATUS_CODES.UNAUTHORIZED,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.UNAUTHORIZED),
+            status: constants.STATUS_CODES.UNAUTHORIZED,
         });
     }
 
-    static forbiddenError(generalErrorMessage, path = [], options = {}) {
+    static forbiddenError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.FORBIDDEN,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.FORBIDDEN,
-            errorCode: options.errorCode || constants.STATUS_CODES.FORBIDDEN,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.FORBIDDEN),
-            status: options.status || constants.STATUS_CODES.FORBIDDEN,
+            generalErrorCode: constants.STATUS_CODES.FORBIDDEN,
+            generalErrorMessage: constants.ERROR_MESSAGES.FORBIDDEN,
+            errorCode: customErrorCode || constants.STATUS_CODES.FORBIDDEN,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.FORBIDDEN),
+            status: constants.STATUS_CODES.FORBIDDEN,
         });
     }
 
-    static unprocessedError(generalErrorMessage, path = [], options = {}) {
+    static unprocessedError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.UNPROCESSABLE_ENTITY,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.UNPROCESSABLE_ENTITY,
-            errorCode: options.errorCode || constants.STATUS_CODES.UNPROCESSABLE_ENTITY,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.UNPROCESSABLE_ENTITY),
-            status: options.status || constants.STATUS_CODES.UNPROCESSABLE_ENTITY,
+            generalErrorCode: constants.STATUS_CODES.UNPROCESSABLE_ENTITY,
+            generalErrorMessage: constants.ERROR_MESSAGES.UNPROCESSABLE_ENTITY,
+            errorCode: customErrorCode || constants.STATUS_CODES.UNPROCESSABLE_ENTITY,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.UNPROCESSABLE_ENTITY),
+            status: constants.STATUS_CODES.UNPROCESSABLE_ENTITY,
         });
     }
 
-    static failedDependencyError(generalErrorMessage, path = [], options = {}) {
+    static failedDependencyError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.FAILED_DEPENDENCY,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.FAILED_DEPENDENCY,
-            errorCode: options.errorCode || constants.STATUS_CODES.FAILED_DEPENDENCY,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.FAILED_DEPENDENCY),
-            status: options.status || constants.STATUS_CODES.FAILED_DEPENDENCY,
+            generalErrorCode: constants.STATUS_CODES.FAILED_DEPENDENCY,
+            generalErrorMessage: constants.ERROR_MESSAGES.FAILED_DEPENDENCY,
+            errorCode: customErrorCode || constants.STATUS_CODES.FAILED_DEPENDENCY,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.FAILED_DEPENDENCY),
+            status: constants.STATUS_CODES.FAILED_DEPENDENCY,
         });
     }
 
-    static conflictError(generalErrorMessage, path = [], options = {}) {
+    static conflictError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.CONFLICT,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.CONFLICT,
-            errorCode: options.errorCode || constants.STATUS_CODES.CONFLICT,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.CONFLICT),
-            status: options.status || constants.STATUS_CODES.CONFLICT,
+            generalErrorCode: constants.STATUS_CODES.CONFLICT,
+            generalErrorMessage: constants.ERROR_MESSAGES.CONFLICT,
+            errorCode: customErrorCode || constants.STATUS_CODES.CONFLICT,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.CONFLICT),
+            status: constants.STATUS_CODES.CONFLICT,
         });
     }
 
-    static goneError(generalErrorMessage, path = [], options = {}) {
+    static goneError(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.GONE,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.GONE,
-            errorCode: options.errorCode || constants.STATUS_CODES.GONE,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.GONE),
-            status: options.status || constants.STATUS_CODES.GONE,
+            generalErrorCode: constants.STATUS_CODES.GONE,
+            generalErrorMessage: constants.ERROR_MESSAGES.GONE,
+            errorCode: customErrorCode || constants.STATUS_CODES.GONE,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.GONE),
+            status: constants.STATUS_CODES.GONE,
         });
     }
 
-    static notAllowed(generalErrorMessage, path = [], options = {}) {
+    static notAllowed(generalErrorMessage, key = '', customErrorCode = null) {
         return new AppError({
-            generalErrorCode: options.generalErrorCode || constants.STATUS_CODES.NOT_ALLOWED,
-            generalErrorMessage: options.generalErrorMessage || constants.ERROR_MESSAGES.NOT_ALLOWED,
-            errorCode: options.errorCode || constants.STATUS_CODES.NOT_ALLOWED,
-            errors: Errors.approximateErrorTypes(generalErrorMessage, path, constants.STATUS_CODES.NOT_ALLOWED),
-            status: options.status || constants.STATUS_CODES.NOT_ALLOWED,
+            generalErrorCode: constants.STATUS_CODES.NOT_ALLOWED,
+            generalErrorMessage: constants.ERROR_MESSAGES.NOT_ALLOWED,
+            errorCode: customErrorCode || constants.STATUS_CODES.NOT_ALLOWED,
+            errors: Errors.approximateErrorTypes(generalErrorMessage, key, customErrorCode || constants.STATUS_CODES.NOT_ALLOWED),
+            status: constants.STATUS_CODES.NOT_ALLOWED,
         });
     }
 }

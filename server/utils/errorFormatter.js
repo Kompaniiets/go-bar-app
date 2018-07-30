@@ -29,10 +29,10 @@ module.exports = (err, req, res, next) => {
 };
 
 function handleSystemErrors(err, req, res, next) {
-    if(err instanceof TypeError)
-    return next(ErrorFactory.internalServerError(
-        err.message, []
-    ));
+    if (err instanceof TypeError)
+        return next(ErrorFactory.internalServerError(
+            err.message, []
+        ));
 }
 
 /**
@@ -44,7 +44,7 @@ function handleSystemErrors(err, req, res, next) {
  */
 function handleMulterErrors(err, req, res, next) {
 
-    if(err.code === LIMIT_FILE_SIZE) {
+    if (err.code === LIMIT_FILE_SIZE) {
         return next(ErrorFactory.validationError(
             CONSTANTS.ERROR_MESSAGES.IMAGE_TOO_LARGE,
             [CONSTANTS.ERROR_MESSAGES.PATH_IMAGE]
@@ -54,7 +54,7 @@ function handleMulterErrors(err, req, res, next) {
 }
 
 function handleStripeErrors(err, req, res, next) {
-    if(err.type === CONSTANTS.ERROR_MESSAGES.TYPE_STRIPE_ERROR || err.type === CONSTANTS.ERROR_MESSAGES.TYPE_STRIPE_CARD_ERROR) {
+    if (err.type === CONSTANTS.ERROR_MESSAGES.TYPE_STRIPE_ERROR || err.type === CONSTANTS.ERROR_MESSAGES.TYPE_STRIPE_CARD_ERROR) {
         return next(ErrorFactory.validationError(
             err.message,
             []
@@ -70,16 +70,16 @@ function handleStripeErrors(err, req, res, next) {
  */
 function handleSequelizeErrors(error) {
     switch (error.constructor) {
-    case sequlize.ValidationError:
-        handleSequelizeValidationError(error);
-        break;
-    case sequlize.UniqueConstraintError:
-    case sequlize.ExclusionConstraintError:
-    case sequlize.ForeignKeyConstraintError:
-        handleSequelizeConstraintError(error);
-        break;
-    default:
-        break;
+        case sequlize.ValidationError:
+            handleSequelizeValidationError(error);
+            break;
+        case sequlize.UniqueConstraintError:
+        case sequlize.ExclusionConstraintError:
+        case sequlize.ForeignKeyConstraintError:
+            handleSequelizeConstraintError(error);
+            break;
+        default:
+            break;
     }
 }
 

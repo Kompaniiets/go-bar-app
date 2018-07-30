@@ -26,6 +26,11 @@ class Controller {
         }, config.jwtKey);
     }
 
+    /**
+     * Create user access token
+     * @param client
+     * @returns {Promise}
+     */
     createUserToken(client) {
         const tokenParams = {};
         tokenParams.createTime = Date.now();
