@@ -4,4 +4,5 @@ module.exports = {
     ERROR_MESSAGES: require('./errorMessages'),
     REGEXP: require('./regexps'),
     PAGING: require('./paging'),
+    ERROR_CODES: require('./errorCodes'),
 };

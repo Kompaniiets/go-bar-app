@@ -22,4 +22,6 @@ module.exports = {
     PATH_EMAIL: 'email',
     LOGIN_VALIDATION: '!!Invalid email address or password.',
     AUTHORIZATION_FAILED: 'Invalid email address or password',
+    INVALID_ACCESS_TOKEN: 'Invalid access token',
+    PATH_TOKEN: 'token',
 };

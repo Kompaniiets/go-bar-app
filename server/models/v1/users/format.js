@@ -1,4 +1,26 @@
 module.exports = () => {
+    function baseResponse(data) {
+        function resStructure(item) {
+            return {
+                id: item.id,
+                email: item.email,
+                firstName: item.firstName,
+                lastName: item.lastName,
+                isBar: item.isBar,
+                isVerified: item.isVerified,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+                token: item.token
+            };
+        }
+
+        if (Array.isArray(data)) {
+            return data.map(user => resStructure(user));
+        }
+
+        return resStructure(data);
+    }
+
     function baseUser(data) {
         function userStructure(item) {
             const user = {
@@ -63,6 +85,7 @@ module.exports = () => {
 
     return {
         baseUser,
-        baseBar
+        baseBar,
+        baseResponse
     };
 };

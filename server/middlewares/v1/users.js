@@ -121,6 +121,19 @@ class UsersMiddleware {
                 return next(err);
             });
     }
+
+    static getSelf(req, res, next) {
+        Models.users.find({
+            where: {
+                id: req.user.id,
+            },
+        }).then((user) => {
+            req.user = user;
+            req.userModel = user;
+            req.responseMessage = user;
+            return next();
+        }).catch(next);
+    }
 }
 
 module.exports = UsersMiddleware;
