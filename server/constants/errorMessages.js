@@ -24,4 +24,6 @@ module.exports = {
     AUTHORIZATION_FAILED: 'Invalid email address or password',
     INVALID_ACCESS_TOKEN: 'Invalid access token',
     PATH_TOKEN: 'token',
+    ACCOUNT_EXISTS: 'Account exists. Please log in using your email address',
+    RECORD_NOT_FOUND: 'Record not found',
 };

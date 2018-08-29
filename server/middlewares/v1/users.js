@@ -122,6 +122,12 @@ class UsersMiddleware {
             });
     }
 
+    /**
+     * Get user info by id
+     * @param req
+     * @param res
+     * @param next
+     */
     static getSelf(req, res, next) {
         Models.users.find({
             where: {
@@ -133,6 +139,30 @@ class UsersMiddleware {
             req.responseMessage = user;
             return next();
         }).catch(next);
+    }
+
+    /**
+     * get user info by email
+     * @param req
+     * @param res
+     * @param next
+     */
+    static getUserByEmail(req, res, next) {
+        Models.users
+            .find({
+                where: {
+                    email: req.userModel.email,
+                },
+            }).then((user) => {
+                if (!user)
+                    return next(ErrorFactory.notFound(CONSTANTS.ERROR_MESSAGES.RECORD_NOT_FOUND, ['']));
+
+                req.user = user;
+                req.userModel = user;
+                req.oldToken = req.user.token;
+
+                return next();
+            }).catch(next);
     }
 }
 

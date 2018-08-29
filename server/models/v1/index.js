@@ -38,6 +38,7 @@ class Models {
      * define models associations
      */
     associateModels() {
+        this.users.hasOne(this.socials);
     }
 }
 

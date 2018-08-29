@@ -17,6 +17,17 @@ module.exports = {
     getterMethods: {},
     defaultScope: {},
     scopes: {
-
+        includeSocial: (models, profileId, type) => ({
+            include: [
+                {
+                    model: models.socials,
+                    required: false,
+                    where: {
+                        socialId: profileId,
+                        type: type
+                    }
+                },
+            ]
+        })
     },
 };

@@ -8,6 +8,9 @@ router.route('/:version/login')
     .get(controllers.callAction('users.test'))
     .post(controllers.callAction('users.login'));
 
+router.route('/:version/fb/login')
+    .post(controllers.callAction('socials.fbLogin'));
+
 router.route('/:version/signup')
     .post(controllers.callAction('users.signup'));
 

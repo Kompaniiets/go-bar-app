@@ -5,4 +5,5 @@ module.exports = {
     REGEXP: require('./regexps'),
     PAGING: require('./paging'),
     ERROR_CODES: require('./errorCodes'),
+    SOCIALS: require('./socials')
 };
