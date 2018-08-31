@@ -37,8 +37,7 @@ module.exports = (sequelize, Sequelize) => ({
     },
     isBar: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
+        allowNull: true
     },
     isVerified: {
         type: Sequelize.BOOLEAN,

@@ -13,7 +13,7 @@ module.exports = {
             password VARCHAR(256) NOT NULL,
             salt VARCHAR(256) NOT NULL,
             token VARCHAR(512),
-            isBar TINYINT NOT NULL DEFAULT 0 COMMENT '0 - false, 1 - true',
+            isBar TINYINT NULL DEFAULT NULL COMMENT '0 - false, 1 - true',
             isVerified TINYINT NOT NULL DEFAULT 0 COMMENT '0 - false, 1 - true',
             createdAt DATETIME(3) DEFAULT NULL,
             updatedAt DATETIME(3) DEFAULT NULL,
