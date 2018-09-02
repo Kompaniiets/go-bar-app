@@ -1,5 +1,6 @@
 const db = require('./db');
 const redis = require('./redis');
+const socials = require('./socials');
 
 const defaults = {
     server: {
@@ -11,6 +12,7 @@ const defaults = {
     jwtRefreshLifeTime: 1000 * 60 * 60 * 48,
     db,
     redis,
+    socials
 };
 
 defaults.server.baseUrl = ['http://', defaults.server.host, ':', defaults.server.port].join('');

@@ -17,6 +17,9 @@ router.route('/:version/signup')
 // Actions available for authorized user with non-confirmed account
 router.use(passport.authenticate('bearer', { session: false }));
 
+router.route('/:version/logout')
+    .post(controllers.callAction('users.logout'));
+
 router.route('/:version/users/me')
     .get(controllers.callAction('users.getProfile'));
 

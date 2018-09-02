@@ -21,6 +21,10 @@ class UsersController extends Controller {
             this.middlewares.users.basicResponse,
             this.middlewares.common.sendResponse
         ];
+        this.logout = [
+            this.middlewares.users.logout,
+            this.middlewares.common.sendResponse,
+        ];
 
         this.getProfile = [
             this.middlewares.users.getSelf,

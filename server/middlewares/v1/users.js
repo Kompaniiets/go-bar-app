@@ -73,6 +73,18 @@ class UsersMiddleware {
             .catch(next);
     }
 
+    static logout(req, res, next) {
+        Models.users.update({
+            token: null
+        }, {
+            where: {
+                id: req.user.id
+            }
+        })
+            .then(() => next())
+            .catch(next);
+    }
+
     /**
      * Check user exist by email
      * @param req

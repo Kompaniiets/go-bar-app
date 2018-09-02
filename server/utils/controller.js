@@ -51,7 +51,7 @@ class Controller {
             client.token = user.token;
             client.lifeTime = user.lifeTime;
             if (!config.jwtRefreshLifeTime) {
-                return reject();
+                return reject(this.Errors.validationError('jwtRefreshLifeTime is required in project config!'));
             }
 
             return resolve(user);
