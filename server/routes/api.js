@@ -20,6 +20,9 @@ router.use(passport.authenticate('bearer', { session: false }));
 router.route('/:version/logout')
     .post(controllers.callAction('users.logout'));
 
+router.route('/:version/role')
+    .patch(controllers.callAction('users.setRole'));
+
 router.route('/:version/users/me')
     .get(controllers.callAction('users.getProfile'));
 

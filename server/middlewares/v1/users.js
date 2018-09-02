@@ -86,6 +86,19 @@ class UsersMiddleware {
     }
 
     /**
+     * Save user role
+     * @param req
+     * @param res
+     * @param next
+     */
+    static saveRole(req, res, next) {
+        req.user.isBar = req.body.role;
+        req.user.save()
+            .then(() => next())
+            .catch(next);
+    }
+
+    /**
      * Check user exist by email
      * @param req
      * @param res

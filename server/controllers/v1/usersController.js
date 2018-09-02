@@ -25,6 +25,13 @@ class UsersController extends Controller {
             this.middlewares.users.logout,
             this.middlewares.common.sendResponse,
         ];
+        this.setRole = [
+            this.validator.users.role,
+            this.middlewares.users.saveRole,
+            this.middlewares.users.getSelf,
+            this.middlewares.users.basicResponse,
+            this.middlewares.common.sendResponse
+        ];
 
         this.getProfile = [
             this.middlewares.users.getSelf,

@@ -187,6 +187,13 @@ class UsersValidator extends BaseValidator {
                 .required(),
         }, req, res, next);
     }
+
+    static role(req, res, next) {
+        super.validate({
+            role: Joi.boolean()
+                .required()
+        }, req, res, next);
+    }
 }
 
 module.exports = UsersValidator;
