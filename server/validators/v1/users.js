@@ -190,7 +190,7 @@ class UsersValidator extends BaseValidator {
 
     static role(req, res, next) {
         super.validate({
-            role: Joi.boolean()
+            isBar: Joi.boolean()
                 .required()
         }, req, res, next);
     }

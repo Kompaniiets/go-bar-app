@@ -92,8 +92,14 @@ class UsersMiddleware {
      * @param next
      */
     static saveRole(req, res, next) {
-        req.user.isBar = req.body.role;
-        req.user.save()
+        Models.users
+            .update({
+                isBar: req.body.isBar
+            }, {
+                where: {
+                    id: req.user.id,
+                }
+            })
             .then(() => next())
             .catch(next);
     }
