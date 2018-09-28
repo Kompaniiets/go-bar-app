@@ -38,6 +38,13 @@ class UsersController extends Controller {
             this.middlewares.users.basicResponse,
             this.middlewares.common.sendResponse
         ];
+
+        this.updateProfile = [
+            this.middlewares.users.getSelf,
+            this.middlewares.users.updateProfile,
+            this.middlewares.users.basicResponse,
+            this.middlewares.common.sendResponse
+        ];
     }
 
     validateSignup(req, res, next) {

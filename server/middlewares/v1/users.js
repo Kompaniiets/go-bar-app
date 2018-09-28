@@ -195,6 +195,14 @@ class UsersMiddleware {
                 return next();
             }).catch(next);
     }
+
+    static updateProfile(req, res, next) {
+        req.userModel.update(req.body)
+            .then((updatedModel) => {
+                req.userModel = updatedModel;
+                return next();
+            });
+    }
 }
 
 module.exports = UsersMiddleware;

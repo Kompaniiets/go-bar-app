@@ -24,6 +24,11 @@ router.route('/:version/users/role')
     .patch(controllers.callAction('users.role'));
 
 router.route('/:version/users/me')
-    .get(controllers.callAction('users.getProfile'));
+    .get(controllers.callAction('users.getProfile'))
+    .patch(controllers.callAction('users.updateProfile'));
+
+router.route('/:version/users/locations')
+    .get(controllers.callAction('location.getLocation'))
+    .post(controllers.callAction('location.addLocation'));
 
 module.exports = router;
