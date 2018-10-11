@@ -7,26 +7,6 @@ const socials = require('../../utils/social/socialService');
 
 class SocialsMiddleware {
     /**
-     * Basic user response
-     * @param req
-     * @param res
-     * @param next
-     */
-    static basicResponse(req, res, next) {
-        try {
-            if (!req.userModel.isBar) {
-                req.responseMessage = Models.users.format().baseUser(req.userModel);
-                return next();
-            }
-
-            req.responseMessage = Models.users.format().baseBar(req.userModel);
-            return next();
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    /**
      * Check is access token exist
      * @param req
      * @param res
