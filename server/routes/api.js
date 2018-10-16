@@ -31,4 +31,10 @@ router.route('/:version/users/locations')
     .get(controllers.callAction('location.getLocation'))
     .post(controllers.callAction('location.addLocation'));
 
+router.route('/:version/users/locations/:id')
+    .delete(controllers.callAction('location.delete'));
+
+router.route('/:version/users/bars')
+    .get(controllers.callAction('bars.getAllBars'));
+
 module.exports = router;

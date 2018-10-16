@@ -1,5 +1,4 @@
 const Controller = require('./../../utils/controller');
-const ErrorFactory = require('./../../utils/errors');
 
 class LocationsController extends Controller {
     constructor(version) {
@@ -12,7 +11,13 @@ class LocationsController extends Controller {
         this.addLocation = [
             this.validator.locations.locationsArray,
             this.middlewares.locations.saveOrUpdateLocation,
+            this.middlewares.schedules.saveOrUpdateSchedule,
             this.middlewares.locations.basicResponse,
+            this.middlewares.common.sendResponse
+        ];
+        this.delete = [
+            this.middlewares.locations.checkIsItUserLocation,
+            this.middlewares.locations.deleteLocation,
             this.middlewares.common.sendResponse
         ];
     }

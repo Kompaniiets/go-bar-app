@@ -1,5 +1,6 @@
 const BaseValidator = require('./../../utils/baseValidator');
 const Joi = require('joi');
+const CONSTANTS = require('./../../constants');
 
 class UsersValidator extends BaseValidator {
     /**
@@ -16,6 +17,15 @@ class UsersValidator extends BaseValidator {
                 .required(),
             info: Joi.string()
                 .max(256)
+                .required(),
+            opensIn: Joi.string()
+                .regex(CONSTANTS.REGEXP.TIME)
+                .required(),
+            closesIn: Joi.string()
+                .regex(CONSTANTS.REGEXP.TIME)
+                .required(),
+            numberOfTables: Joi.number().integer()
+                .max(100)
                 .required(),
             lat: Joi.number()
                 .min(-90)

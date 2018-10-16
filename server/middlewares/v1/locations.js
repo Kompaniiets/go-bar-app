@@ -1,6 +1,7 @@
 const Models = require('./../../models/v1');
+const ErrorFactory = require('./../../utils/errors');
 
-class SocialsMiddleware {
+class LocationsMiddleware {
     /**
      * Basic user response
      * @param req
@@ -14,22 +15,6 @@ class SocialsMiddleware {
         } catch (e) {
             next(e);
         }
-    }
-
-    /**
-     * Delete all locations
-     * @param req
-     * @param res
-     * @param next
-     */
-    static deleteLocation(req, res, next) {
-        Models.locations.destroy({
-            where: {
-                id: req.body.id
-            }
-        })
-            .then(() => next())
-            .catch(next);
     }
 
     /**
@@ -67,6 +52,42 @@ class SocialsMiddleware {
     }
 
     /**
+     * Check is location belongs to user
+     * @param req
+     * @param res
+     * @param next
+     */
+    static checkIsItUserLocation(req, res, next) {
+        Models.locations.find({
+            where: {
+                id: req.params.id,
+                userId: req.user.id
+            }
+        }).then((result) => {
+            if (!result)
+                return next(ErrorFactory.notFound('Location not found!'));
+
+            return next();
+        }).catch(next);
+    }
+
+    /**
+     * Delete location by id
+     * @param req
+     * @param res
+     * @param next
+     */
+    static deleteLocation(req, res, next) {
+        Models.locations.destroy({
+            where: {
+                id: req.params.id,
+            }
+        })
+            .then(() => next())
+            .catch(next);
+    }
+
+    /**
      * Get all user locations
      * @param req
      * @param res
@@ -76,7 +97,13 @@ class SocialsMiddleware {
         Models.locations.findAll({
             where: {
                 userId: req.user.id
-            }
+            },
+            include: [
+                {
+                    model: Models.schedules,
+                    required: false,
+                }
+            ]
         }).then((locations) => {
             req.locationModel = locations;
             return next();
@@ -84,4 +111,4 @@ class SocialsMiddleware {
     }
 }
 
-module.exports = SocialsMiddleware;
+module.exports = LocationsMiddleware;

@@ -39,6 +39,7 @@ class Models {
      */
     associateModels() {
         this.users.hasOne(this.socials);
+        this.locations.hasOne(this.schedules);
     }
 }
 
