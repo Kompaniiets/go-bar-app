@@ -14,6 +14,9 @@ router.route('/:version/fb/login')
 router.route('/:version/signup')
     .post(controllers.callAction('users.signup'));
 
+router.route('/:version/users/bars')
+    .get(controllers.callAction('bars.getAllBars'));
+
 // Actions available for authorized user with non-confirmed account
 router.use(passport.authenticate('bearer', { session: false }));
 
@@ -33,8 +36,5 @@ router.route('/:version/users/locations')
 
 router.route('/:version/users/locations/:id')
     .delete(controllers.callAction('location.delete'));
-
-router.route('/:version/users/bars')
-    .get(controllers.callAction('bars.getAllBars'));
 
 module.exports = router;
