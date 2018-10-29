@@ -16,6 +16,21 @@ module.exports = {
         },
     },
     scopes: {
+        byIds: (ids) => ({
+            where: {
+                id: {
+                    $in: ids
+                }
+            }
+        }),
+        includeSchedules: (models, required = false) => ({
+            include: [
+                {
+                    model: models.schedules,
+                    required: required,
+                }
+            ]
+        })
     },
     classMethods: {},
     defaultScope: {}
