@@ -47,7 +47,8 @@ class BarsMiddleware {
                 if (!result.length)
                     return [];
 
-                scopes.push({method: ['includeSchedules', Models, true]});
+                scopes.push({ method: ['includeSchedules', Models, true] });
+                scopes.push({ method: ['includeBar', Models, true] });
 
                 return Models.locations
                     .scope(scopes)
@@ -58,6 +59,36 @@ class BarsMiddleware {
                 return next();
             })
             .catch(next);
+    }
+
+    /**
+     * Get bar details info by id
+     * @param req
+     * @param res
+     * @param next
+     * @returns {*}
+     */
+    static getSingleBar(req, res, next) {
+        const paramsId = parseInt(req.params.id);
+        const scopes = [
+            { method: ['includeSchedules', Models, true] },
+            { method: ['includeBar', Models, true] }
+        ];
+
+        if (isNaN(paramsId))
+            return next(ErrorFactory.validationError('Wrong id parameter!'));
+
+        Models.locations
+            .scope(scopes)
+            .find({
+                where: {
+                    id: paramsId
+                }
+            })
+            .then((data) => {
+                req.locationModel = data;
+                return next();
+            }).catch(next);
     }
 }
 

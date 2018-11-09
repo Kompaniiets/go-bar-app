@@ -40,6 +40,7 @@ class Models {
     associateModels() {
         this.users.hasOne(this.socials);
         this.locations.hasOne(this.schedules);
+        this.locations.belongsTo(this.users, {foreignKey: 'userId', as: 'bar'});
     }
 }
 

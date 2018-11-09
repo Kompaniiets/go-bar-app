@@ -12,6 +12,17 @@ module.exports = () => {
                 updatedAt: item.updatedAt
             };
 
+            if (item.bar) {
+                location.bar = {
+                    id: item.bar.id,
+                    email: item.bar.email,
+                    firstName: item.bar.firstName,
+                    lastName: item.bar.lastName,
+                    barName: item.bar.barName,
+                    phone: item.bar.phone,
+                };
+            }
+
             if (item.schedule) {
                 location.opensIn = item.schedule.opensIn;
                 location.closesIn = item.schedule.closesIn;
@@ -22,7 +33,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => resStructure(user));
+            return data.map(item => resStructure(item));
         }
 
         return resStructure(data);

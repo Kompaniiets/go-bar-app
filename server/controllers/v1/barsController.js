@@ -8,6 +8,11 @@ class BarsController extends Controller {
             this.middlewares.locations.basicResponse,
             this.middlewares.common.sendResponse
         ];
+        this.getBarInfo = [
+            this.middlewares.bars.getSingleBar,
+            this.middlewares.locations.basicResponse,
+            this.middlewares.common.sendResponse
+        ];
     }
 }
 

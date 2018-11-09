@@ -23,6 +23,18 @@ module.exports = {
                 }
             }
         }),
+        includeBar: (models, required = false) => ({
+            include: [
+                {
+                    model: models.users,
+                    as: 'bar',
+                    required: required,
+                    where: {
+                        isBar: 1
+                    }
+                }
+            ]
+        }),
         includeSchedules: (models, required = false) => ({
             include: [
                 {
