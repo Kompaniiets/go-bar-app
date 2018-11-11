@@ -17,6 +17,9 @@ router.route('/:version/signup')
 router.route('/:version/users/bars')
     .get(controllers.callAction('bars.getAllBars'));
 
+router.route('/:version/users/bars/:id')
+    .get(controllers.callAction('bars.getBarInfo'));
+
 // Actions available for authorized user with non-confirmed account
 router.use(passport.authenticate('bearer', { session: false }));
 

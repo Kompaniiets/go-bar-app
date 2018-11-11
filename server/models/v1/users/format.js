@@ -15,7 +15,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => resStructure(user));
+            return data.map(item => resStructure(item));
         }
 
         return resStructure(data);
@@ -46,7 +46,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => userStructure(user));
+            return data.map(item => userStructure(item));
         }
 
         return userStructure(data);
@@ -77,7 +77,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => userStructure(user));
+            return data.map(item => userStructure(item));
         }
 
         return userStructure(data);
