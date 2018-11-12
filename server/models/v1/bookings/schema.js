@@ -32,5 +32,8 @@ module.exports = function (sequelize, Sequelize) {
             type: Sequelize.DATE(3),
             allowNull: true
         },
+        endAt: {
+            type: Sequelize.VIRTUAL
+        },
     };
 };

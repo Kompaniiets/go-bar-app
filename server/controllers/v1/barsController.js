@@ -10,6 +10,7 @@ class BarsController extends Controller {
         ];
         this.getBarInfo = [
             this.middlewares.bars.getSingleBar,
+            this.middlewares.bars.checkFreeTables,
             this.middlewares.locations.basicResponse,
             this.middlewares.common.sendResponse
         ];

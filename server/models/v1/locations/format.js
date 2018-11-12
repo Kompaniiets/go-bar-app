@@ -9,7 +9,8 @@ module.exports = () => {
                 lat: item.lat,
                 lng: item.lng,
                 createdAt: item.createdAt,
-                updatedAt: item.updatedAt
+                updatedAt: item.updatedAt,
+                tables: !item.bookedTables ? [] : new Array(item.schedule.numberOfTables).fill({})
             };
 
             if (item.bar) {
@@ -27,6 +28,18 @@ module.exports = () => {
                 location.opensIn = item.schedule.opensIn;
                 location.closesIn = item.schedule.closesIn;
                 location.numberOfTables = item.schedule.numberOfTables;
+            }
+
+            if (item.bookedTables && item.bookedTables.length) {
+                location.tables = item.bookedTables.map(i => ({
+                    userId: i.userId,
+                    startAt: i.startAt,
+                    endAt: i.endAt
+                }));
+
+                if (location.tables.length < item.schedule.numberOfTables) {
+                    location.tables = location.tables.concat(new Array(item.schedule.numberOfTables - location.tables.length).fill({}));
+                }
             }
 
             return location;

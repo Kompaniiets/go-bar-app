@@ -1,6 +1,7 @@
 const Models = require('./../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
 const LocationsQueries = require('../../helpers/locationsQueries');
+const moment = require('moment');
 
 class BarsMiddleware {
     /**
@@ -69,24 +70,59 @@ class BarsMiddleware {
      * @returns {*}
      */
     static getSingleBar(req, res, next) {
-        const paramsId = parseInt(req.params.id);
+        req.barId = parseInt(req.params.id);
+
         const scopes = [
             { method: ['includeSchedules', Models, true] },
             { method: ['includeBar', Models, true] }
         ];
 
-        if (isNaN(paramsId))
+        if (isNaN(req.barId))
             return next(ErrorFactory.validationError('Wrong id parameter!'));
 
         Models.locations
             .scope(scopes)
             .find({
-                where: {
-                    id: paramsId
-                }
+                where: { id: req.barId }
             })
             .then((data) => {
                 req.locationModel = data;
+                return next();
+            }).catch(next);
+    }
+
+    /**
+     * Check free bar tables
+     * @param req
+     * @param res
+     * @param next
+     */
+    static checkFreeTables(req, res, next) {
+        const getDate = moment(req.query.date).format('YYYY-MM-DD');
+        const endDate = getDate + ' ' + req.locationModel.schedule.closesIn;
+
+        Models.bookings
+            .findAndCountAll({
+                attributes: [
+                    'id',
+                    'userId',
+                    'startAt',
+                    'duration',
+                    [Models.sequelize.literal('DATE_ADD(startAt, INTERVAL duration MINUTE)'), 'endAt']
+                ],
+                where: {
+                    locationId: req.barId,
+                    startsAt: Models.sequelize.literal(`
+                        (
+                            DATE_ADD(startAt, INTERVAL duration MINUTE) >= '${req.query.date}'
+                            AND startAt <= '${endDate}'
+                        )`
+                    )
+                }
+            })
+            .then((result) => {
+                req.locationModel.bookedTablesCount = result.count;
+                req.locationModel.bookedTables = result.rows;
                 return next();
             }).catch(next);
     }
