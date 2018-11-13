@@ -1,7 +1,6 @@
 const Models = require('./../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
 const LocationsQueries = require('../../helpers/locationsQueries');
-const moment = require('moment');
 
 class BarsMiddleware {
     /**
@@ -70,8 +69,6 @@ class BarsMiddleware {
      * @returns {*}
      */
     static getSingleBar(req, res, next) {
-        req.barId = parseInt(req.params.id);
-
         const scopes = [
             { method: ['includeSchedules', Models, true] },
             { method: ['includeBar', Models, true] }
@@ -92,37 +89,72 @@ class BarsMiddleware {
     }
 
     /**
-     * Check free bar tables
+     * Get booked tables
      * @param req
      * @param res
      * @param next
      */
-    static checkFreeTables(req, res, next) {
-        const getDate = moment(req.query.date).format('YYYY-MM-DD');
-        const endDate = getDate + ' ' + req.locationModel.schedule.closesIn;
-
+    static getBookedTables(req, res, next) {
         Models.bookings
+            .scope({ method: ['checkFreeTables', Models, req] })
             .findAndCountAll({
                 attributes: [
                     'id',
                     'userId',
+                    'locationId',
                     'startAt',
                     'duration',
                     [Models.sequelize.literal('DATE_ADD(startAt, INTERVAL duration MINUTE)'), 'endAt']
                 ],
                 where: {
                     locationId: req.barId,
-                    startsAt: Models.sequelize.literal(`
-                        (
-                            DATE_ADD(startAt, INTERVAL duration MINUTE) >= '${req.query.date}'
-                            AND startAt <= '${endDate}'
-                        )`
-                    )
                 }
             })
             .then((result) => {
                 req.locationModel.bookedTablesCount = result.count;
                 req.locationModel.bookedTables = result.rows;
+                return next();
+            }).catch(next);
+    }
+
+    /**
+     * Check free tables
+     * @param req
+     * @param res
+     * @param next
+     * @returns {*}
+     */
+    static checkFreeTables(req, res, next) {
+        if ((req.locationModel.schedule.numberOfTables - req.locationModel.bookedTablesCount) === 0)
+            return next(ErrorFactory.validationError('No free tables!'));
+
+        Models.bookings.create({
+            userId: req.user.id,
+            locationId: req.locationModel.id,
+            startAt: req.bookedDate,
+            duration: req.bookedDuration
+        })
+            .then(() => next())
+            .catch(next);
+    }
+
+    /**
+     * Ckeck if user already booked tables in this time
+     * @param req
+     * @param res
+     * @param next
+     */
+    static checkAlreadyBooked(req, res, next) {
+        Models.bookings
+            .scope({ method: ['checkFreeTables', Models, req] })
+            .find({
+                where: {
+                    userId: req.user.id,
+                    locationId: req.barId,
+                },
+            }).then((result) => {
+                if(result)
+                    return next(ErrorFactory.conflictError('You already booked the table in this time range'));
                 return next();
             }).catch(next);
     }

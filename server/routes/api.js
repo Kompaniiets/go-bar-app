@@ -40,4 +40,7 @@ router.route('/:version/users/locations')
 router.route('/:version/users/locations/:id')
     .delete(controllers.callAction('location.delete'));
 
+router.route('/:version/bars/book')
+    .post(controllers.callAction('bars.bookTable'));
+
 module.exports = router;
