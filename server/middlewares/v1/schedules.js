@@ -26,9 +26,9 @@ class SchedulesMiddleware {
     static saveOrUpdateSchedule(req, res, next) {
         const newSchedule = {
             locationId: req.locationModel.id,
-            opensIn: req.body.opensIn,
-            closesIn: req.body.closesIn,
-            numberOfTables: req.body.numberOfTables
+            opensIn: req.body.schedule.opensIn,
+            closesIn: req.body.schedule.closesIn,
+            numberOfTables: req.body.schedule.numberOfTables
         };
 
         Models.schedules.find({

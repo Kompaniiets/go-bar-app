@@ -1,5 +1,6 @@
 const Models = require('./../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
+const CONSTANT = require('../../constants');
 
 class LocationsMiddleware {
     /**
@@ -65,7 +66,7 @@ class LocationsMiddleware {
             }
         }).then((result) => {
             if (!result)
-                return next(ErrorFactory.notFound('Location not found!'));
+                return next(ErrorFactory.notFound(CONSTANT.ERROR_MESSAGES.LOCATION_NOT_FOUND));
 
             return next();
         }).catch(next);

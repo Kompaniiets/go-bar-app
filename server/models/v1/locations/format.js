@@ -14,7 +14,7 @@ module.exports = () => {
             };
 
             if (item.bar) {
-                location.bar = {
+                location.user = {
                     id: item.bar.id,
                     email: item.bar.email,
                     firstName: item.bar.firstName,
@@ -25,9 +25,14 @@ module.exports = () => {
             }
 
             if (item.schedule) {
-                location.opensIn = item.schedule.opensIn;
-                location.closesIn = item.schedule.closesIn;
-                location.numberOfTables = item.schedule.numberOfTables;
+                location.schedule = {
+                    id: item.schedule.id,
+                    locationId: item.schedule.locationId,
+                    opensIn: item.schedule.opensIn,
+                    closesIn: item.schedule.closesIn,
+                    numberOfTables: item.schedule.numberOfTables,
+                    createdAt: item.schedule.createdAt,
+                };
             }
 
             if (item.bookedTables && item.bookedTables.length) {

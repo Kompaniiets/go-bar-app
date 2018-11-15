@@ -3,7 +3,7 @@ module.exports = {
     STATUS_CODES: require('./statusCodes'),
     ERROR_MESSAGES: require('./errorMessages'),
     REGEXP: require('./regexps'),
-    PAGING: require('./paging'),
+    DEFAULT_VALUES: require('./defaults'),
     ERROR_CODES: require('./errorCodes'),
     SOCIALS: require('./socials')
 };

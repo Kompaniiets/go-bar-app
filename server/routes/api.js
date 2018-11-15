@@ -14,10 +14,10 @@ router.route('/:version/fb/login')
 router.route('/:version/signup')
     .post(controllers.callAction('users.signup'));
 
-router.route('/:version/users/bars')
+router.route('/:version/bars/list')
     .get(controllers.callAction('bars.getAllBars'));
 
-router.route('/:version/users/bars/:id')
+router.route('/:version/bars/:id/info')
     .get(controllers.callAction('bars.getBarInfo'));
 
 // Actions available for authorized user with non-confirmed account
@@ -40,7 +40,7 @@ router.route('/:version/users/locations')
 router.route('/:version/users/locations/:id')
     .delete(controllers.callAction('location.delete'));
 
-router.route('/:version/bars/book')
+router.route('/:version/users/bars')
     .post(controllers.callAction('bars.bookTable'));
 
 module.exports = router;

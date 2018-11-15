@@ -14,9 +14,8 @@ class SocialsMiddleware {
      * @returns {*}
      */
     static checkAccessToken(req, res, next) {
-        if (!req.body.accessToken) {
-            return next(ErrorFactory.validationError('accessToken is required!'));
-        }
+        if (!req.body.accessToken)
+            return next(ErrorFactory.validationError(CONSTANTS.ERROR_MESSAGES.ACCESS_TOKEN_REQUIRED));
 
         return next();
     }
@@ -56,7 +55,7 @@ class SocialsMiddleware {
     static checkSocialEmail(req, res, next) {
         if (!req.socialProfile.email) {
             return next(ErrorFactory.notFound(
-                'Email was not returned by social network',
+                CONSTANTS.ERROR_MESSAGES.EMAIL_NOT_RETURNED,
                 [CONSTANTS.ERROR_MESSAGES.PATH_EMAIL]));
         }
         return next();

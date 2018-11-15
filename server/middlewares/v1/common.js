@@ -35,12 +35,12 @@ class CommonMiddlewares {
 
         req.pagination = true;
 
-        if ((!req.query.limit || req.query.limit < 1) || (req.query.limit && req.query.limit > CONSTANTS.PAGING.MAX_LIMIT)) {
-            req.query.limit = CONSTANTS.PAGING.DEFAULT_LIMIT;
+        if ((!req.query.limit || req.query.limit < 1) || (req.query.limit && req.query.limit > CONSTANTS.DEFAULT_VALUES.MAX_LIMIT)) {
+            req.query.limit = CONSTANTS.DEFAULT_VALUES.DEFAULT_LIMIT;
         }
 
-        if (!req.query.offset || req.query.offset < CONSTANTS.PAGING.DEFAULT_OFFSET) {
-            req.query.offset = CONSTANTS.PAGING.DEFAULT_OFFSET;
+        if (!req.query.offset || req.query.offset < CONSTANTS.DEFAULT_VALUES.DEFAULT_OFFSET) {
+            req.query.offset = CONSTANTS.DEFAULT_VALUES.DEFAULT_OFFSET;
         }
 
         return next();
