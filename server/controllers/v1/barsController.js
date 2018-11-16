@@ -4,7 +4,9 @@ class BarsController extends Controller {
     constructor(version) {
         super(version);
         this.getAllBars = [
-            this.middlewares.bars.getAllBars,
+            this.middlewares.common.addPagingQuery,
+            this.middlewares.bars.getBarsList,
+            this.middlewares.bars.countBars,
             this.middlewares.locations.basicResponse,
             this.middlewares.common.sendResponse
         ];

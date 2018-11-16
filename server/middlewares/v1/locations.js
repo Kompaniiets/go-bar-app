@@ -12,6 +12,10 @@ class LocationsMiddleware {
     static basicResponse(req, res, next) {
         try {
             req.responseMessage = Models.locations.format().base(req.locationModel);
+
+            if (req.locationModel.count)
+                req.responseEntitiesCount = req.locationModel.count;
+
             return next();
         } catch (e) {
             next(e);

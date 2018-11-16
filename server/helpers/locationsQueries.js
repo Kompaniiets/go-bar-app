@@ -1,5 +1,5 @@
-const GET_LOCATIONS_BY_PARAMS = `
-        SELECT
+const LOCATION_QUERY = `
+    SELECT
           id, (
             6371 * acos (
               cos(radians($lat))
@@ -12,9 +12,23 @@ const GET_LOCATIONS_BY_PARAMS = `
         FROM locations
         HAVING distance < $radius
         ORDER BY distance
-        LIMIT $offset, $limit;
+`;
+
+const ADD_PAGINATION = 'LIMIT $offset, $limit';
+
+const GET_LOCATIONS_BY_PARAMS = `
+        ${LOCATION_QUERY}
+        ${ADD_PAGINATION};
+`;
+
+const COUNT_LOCATIONS = `
+        SELECT 
+            COUNT(DISTINCT barGroups.id) AS countRows
+        FROM
+            (${LOCATION_QUERY}) AS barGroups
 `;
 
 module.exports = {
-    GET_LOCATIONS_BY_PARAMS
+    GET_LOCATIONS_BY_PARAMS,
+    COUNT_LOCATIONS
 };

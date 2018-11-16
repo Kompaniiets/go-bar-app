@@ -25,15 +25,15 @@ class BarsMiddleware {
      * @param res
      * @param next
      */
-    static getAllBars(req, res, next) {
+    static getBarsList(req, res, next) {
         let scopes = [];
 
         req.bindQuery = {
             lat: req.query.lat,
             lng: req.query.lng,
             radius: parseInt(req.query.radius) || CONSTANT.DEFAULT_VALUES.DEFAULT_RADIUS,
-            limit: req.query.limit || 10,
-            offset: req.query.offset || 0,
+            limit: req.query.limit,
+            offset: req.query.offset,
         };
 
         Models.sequelize.query(LocationsQueries.GET_LOCATIONS_BY_PARAMS,
@@ -57,6 +57,25 @@ class BarsMiddleware {
             })
             .then((data) => {
                 req.locationModel = data;
+                return next();
+            })
+            .catch(next);
+    }
+
+    /**
+     * Count all bars by coordinates
+     * @param req
+     * @param res
+     * @param next
+     */
+    static countBars(req, res, next) {
+        Models.sequelize.query(LocationsQueries.COUNT_LOCATIONS,
+            {
+                bind: req.bindQuery,
+                type: Models.sequelize.QueryTypes.SELECT
+            })
+            .then((count) => {
+                req.locationModel.count = count[0].countRows;
                 return next();
             })
             .catch(next);
