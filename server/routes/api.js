@@ -43,4 +43,7 @@ router.route('/:version/users/locations/:id')
 router.route('/:version/users/bars')
     .post(controllers.callAction('bars.bookTable'));
 
+router.route('/:version/users/bars/avatar')
+    .put(controllers.callAction('users.uploadAvatar'));
+
 module.exports = router;

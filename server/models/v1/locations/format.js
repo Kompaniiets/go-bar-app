@@ -1,3 +1,5 @@
+const CONSTANTS = require('../../../constants');
+
 module.exports = () => {
     function base(data) {
         function resStructure(item) {
@@ -21,6 +23,7 @@ module.exports = () => {
                     lastName: item.bar.lastName,
                     barName: item.bar.barName,
                     phone: item.bar.phone,
+                    avatarUrl: item.bar.imageId ? `${CONSTANTS.S3.BASE_PATH}${item.bar.image.url}` : '',
                 };
             }
 

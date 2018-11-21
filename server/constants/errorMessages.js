@@ -32,4 +32,5 @@ module.exports = {
     LOCATION_NOT_FOUND: 'Location not found!',
     ACCESS_TOKEN_REQUIRED: 'accessToken is required!',
     EMAIL_NOT_RETURNED: 'Email was not returned by social network',
+    IMAGE_MISSING: 'Invalid image',
 };

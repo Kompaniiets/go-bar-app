@@ -5,5 +5,7 @@ module.exports = {
     REGEXP: require('./regexps'),
     DEFAULT_VALUES: require('./defaults'),
     ERROR_CODES: require('./errorCodes'),
-    SOCIALS: require('./socials')
+    SOCIALS: require('./socials'),
+    IMAGES: require('./images'),
+    S3: require('./s3'),
 };

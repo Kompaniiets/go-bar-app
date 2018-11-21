@@ -71,7 +71,8 @@ class SocialsMiddleware {
         req.needCreateProfile = false;
 
         Models.users
-            .scope({ method: ['includeSocial', Models, req.socialProfile.id, req.socialType] })
+            .scope([{ method: ['includeSocial', Models, req.socialProfile.id, req.socialType] }],
+                { method: ['image', Models] })
             .findOne({
                 where: {
                     email: req.socialProfile.email

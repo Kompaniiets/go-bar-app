@@ -27,7 +27,7 @@ const passportHandle = passport.use(new Strategy(
                             [CONSTANTS.STATUS_CODES.UNAUTHORIZED]));
                     }
 
-                    return cb(null, Models.users.format().baseResponse(result));
+                    return cb(null, result);
                 });
             })
             .catch(() => cb(ErrorFactory.unauthorizedError(

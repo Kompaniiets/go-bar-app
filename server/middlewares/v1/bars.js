@@ -1,7 +1,7 @@
 const Models = require('./../../models/v1');
 const ErrorFactory = require('./../../utils/errors');
 const LocationsQueries = require('../../helpers/locationsQueries');
-const CONSTANT = require('../../constants');
+const CONSTANTS = require('../../constants');
 
 class BarsMiddleware {
     /**
@@ -31,7 +31,7 @@ class BarsMiddleware {
         req.bindQuery = {
             lat: req.query.lat,
             lng: req.query.lng,
-            radius: parseInt(req.query.radius) || CONSTANT.DEFAULT_VALUES.DEFAULT_RADIUS,
+            radius: parseInt(req.query.radius) || CONSTANTS.DEFAULT_VALUES.DEFAULT_RADIUS,
             limit: req.query.limit,
             offset: req.query.offset,
         };
@@ -95,7 +95,7 @@ class BarsMiddleware {
         ];
 
         if (isNaN(req.barId))
-            return next(ErrorFactory.validationError(CONSTANT.ERROR_MESSAGES.WRONG_ID_PARAMETER));
+            return next(ErrorFactory.validationError(CONSTANTS.ERROR_MESSAGES.WRONG_ID_PARAMETER));
 
         Models.locations
             .scope(scopes)
@@ -146,7 +146,7 @@ class BarsMiddleware {
      */
     static checkFreeTables(req, res, next) {
         if ((req.locationModel.schedule.numberOfTables - req.locationModel.bookedTablesCount) === 0)
-            return next(ErrorFactory.validationError(CONSTANT.ERROR_MESSAGES.NO_FREE_TABLES));
+            return next(ErrorFactory.validationError(CONSTANTS.ERROR_MESSAGES.NO_FREE_TABLES));
 
         Models.bookings.create({
             userId: req.user.id,
@@ -173,10 +173,41 @@ class BarsMiddleware {
                     locationId: req.barId,
                 },
             }).then((result) => {
-                if(result)
-                    return next(ErrorFactory.conflictError(CONSTANT.ERROR_MESSAGES.TABLE_ALREADY_BOOKED));
-                return next();
-            }).catch(next);
+            if (result)
+                return next(ErrorFactory.conflictError(CONSTANTS.ERROR_MESSAGES.TABLE_ALREADY_BOOKED));
+            return next();
+        }).catch(next);
+    }
+
+    static saveAvatar(req, res, next) {
+        let fileExtension;
+
+        if (!req.file)
+            return next(ErrorFactory.validationError(CONSTANTS.ERROR_MESSAGES.IMAGE_MISSING));
+
+        fileExtension = req.file.originalname.split('.').pop();
+
+        function handleCreation(req, res, next) {
+            Models.images.create({
+                url: `${req.file.filename}.${fileExtension}`
+            }).then((image) => {
+                req.userModel.imageId = image.id;
+                req.userModel.save().then((updatedUser) => {
+                    req.userModel = updatedUser;
+                    return next();
+                });
+            });
+        }
+
+        Models.images.find({
+            where: { id: req.user.imageId }
+        }).then((destroy) => {
+            if (!destroy) {
+                return handleCreation(req, res, next);
+            }
+
+            destroy.destroy().then(() => handleCreation(req, res, next));
+        }).catch(next);
     }
 }
 

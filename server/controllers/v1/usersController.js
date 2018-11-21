@@ -1,5 +1,6 @@
 const Controller = require('./../../utils/controller');
 const ErrorFactory = require('./../../utils/errors');
+const fileUploader = require('./../../utils/fileUploader/upload');
 
 class UsersController extends Controller {
     constructor(version) {
@@ -42,6 +43,14 @@ class UsersController extends Controller {
         this.updateProfile = [
             this.middlewares.users.getSelf,
             this.middlewares.users.updateProfile,
+            this.middlewares.users.basicResponse,
+            this.middlewares.common.sendResponse
+        ];
+        this.uploadAvatar = [
+            fileUploader,
+            this.middlewares.users.getSelf,
+            this.middlewares.bars.saveAvatar,
+            this.middlewares.users.getSelf,
             this.middlewares.users.basicResponse,
             this.middlewares.common.sendResponse
         ];

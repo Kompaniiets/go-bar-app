@@ -31,7 +31,14 @@ module.exports = {
                     required: required,
                     where: {
                         isBar: 1
-                    }
+                    },
+                    include: [
+                        {
+                            model: models.images,
+                            as: 'image',
+                            required: false,
+                        },
+                    ],
                 }
             ]
         }),

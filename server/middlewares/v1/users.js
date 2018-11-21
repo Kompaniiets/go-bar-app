@@ -111,23 +111,26 @@ class UsersMiddleware {
      * @param next
      */
     static findUserByEmail(req, res, next) {
-        Models.users.find({
-            where: {
-                email: req.body.email
-            }
-        }).then((user) => {
-            if (!user) {
-                return next(ErrorFactory.notFound(
-                    CONSTANTS.ERROR_MESSAGES.INVALID_EMAIL,
-                    CONSTANTS.ERROR_MESSAGES.PATH_EMAIL
-                ));
-            }
+        Models.users
+            .scope([{ method: ['image', Models] }])
+            .find({
+                where: {
+                    email: req.body.email
+                }
+            })
+            .then((user) => {
+                if (!user) {
+                    return next(ErrorFactory.notFound(
+                        CONSTANTS.ERROR_MESSAGES.INVALID_EMAIL,
+                        CONSTANTS.ERROR_MESSAGES.PATH_EMAIL
+                    ));
+                }
 
-            req.user = user;
-            req.userModel = user;
-            req.responseMessage = user;
-            return next();
-        }).catch(next);
+                req.user = user;
+                req.userModel = user;
+                req.responseMessage = user;
+                return next();
+            }).catch(next);
     }
 
     /**
@@ -160,16 +163,19 @@ class UsersMiddleware {
      * @param next
      */
     static getSelf(req, res, next) {
-        Models.users.find({
-            where: {
-                id: req.user.id,
-            },
-        }).then((user) => {
-            req.user = user;
-            req.userModel = user;
-            req.responseMessage = user;
-            return next();
-        }).catch(next);
+        Models.users
+            .scope([{ method: ['image', Models] }])
+            .find({
+                where: {
+                    id: req.user.id,
+                },
+            })
+            .then((user) => {
+                req.user = user;
+                req.userModel = user;
+                req.responseMessage = user;
+                return next();
+            }).catch(next);
     }
 
     /**
@@ -180,11 +186,13 @@ class UsersMiddleware {
      */
     static getUserByEmail(req, res, next) {
         Models.users
+            .scope([{ method: ['image', Models] }])
             .find({
                 where: {
                     email: req.userModel.email,
                 },
-            }).then((user) => {
+            })
+            .then((user) => {
                 if (!user)
                     return next(ErrorFactory.notFound(CONSTANTS.ERROR_MESSAGES.RECORD_NOT_FOUND, ['']));
 

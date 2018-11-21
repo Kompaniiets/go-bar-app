@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Kompaniiets/go-bar-app#readme",
   "dependencies": {
+    "aws-sdk": "^2.359.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
@@ -25,6 +26,7 @@
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
+    "multer": "^1.4.1",
     "mysql2": "^1.5.3",
     "on-headers": "^1.0.1",
     "passport": "^0.4.0",
