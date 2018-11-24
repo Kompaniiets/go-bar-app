@@ -1,5 +1,4 @@
 const createdAtDate = require('../../../helpers/createdAtDate');
-const CONSTANTS = require('../../../constants');
 
 module.exports = {
     timestamps: false,
@@ -17,6 +16,15 @@ module.exports = {
     getterMethods: {},
     defaultScope: {},
     scopes: {
+        image: models => ({
+            include: [
+                {
+                    model: models.images,
+                    as: 'image',
+                    required: false,
+                },
+            ],
+        }),
         includeSocial: (models, profileId, type) => ({
             include: [
                 {

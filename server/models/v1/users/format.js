@@ -1,3 +1,5 @@
+const CONSTANTS = require('../../../constants');
+
 module.exports = () => {
     function baseResponse(data) {
         function resStructure(item) {
@@ -7,6 +9,7 @@ module.exports = () => {
                 firstName: item.firstName,
                 lastName: item.lastName,
                 isBar: item.isBar,
+                avatarUrl: item.imageId ? `${CONSTANTS.S3.BASE_PATH}${item.image.url}` : '',
                 isVerified: item.isVerified,
                 createdAt: item.createdAt,
                 updatedAt: item.updatedAt,
@@ -15,7 +18,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => resStructure(user));
+            return data.map(item => resStructure(item));
         }
 
         return resStructure(data);
@@ -29,6 +32,7 @@ module.exports = () => {
                 firstName: item.firstName,
                 lastName: item.lastName,
                 isBar: item.isBar,
+                avatarUrl: item.imageId ? `${CONSTANTS.S3.BASE_PATH}${item.image.url}` : '',
                 isVerified: item.isVerified,
                 createdAt: item.createdAt,
                 updatedAt: item.updatedAt,
@@ -46,7 +50,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => userStructure(user));
+            return data.map(item => userStructure(item));
         }
 
         return userStructure(data);
@@ -60,6 +64,7 @@ module.exports = () => {
                 barName: item.barName,
                 phone: item.phone,
                 isBar: item.isBar,
+                avatarUrl: item.imageId ? `${CONSTANTS.S3.BASE_PATH}${item.image.url}` : '',
                 isVerified: item.isVerified,
                 createdAt: item.createdAt,
                 updatedAt: item.updatedAt,
@@ -77,7 +82,7 @@ module.exports = () => {
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => userStructure(user));
+            return data.map(item => userStructure(item));
         }
 
         return userStructure(data);

@@ -26,4 +26,11 @@ module.exports = {
     PATH_TOKEN: 'token',
     ACCOUNT_EXISTS: 'Account exists. Please log in using your email address',
     RECORD_NOT_FOUND: 'Record not found',
+    WRONG_ID_PARAMETER: 'Wrong id parameter!',
+    NO_FREE_TABLES: 'No free tables!',
+    TABLE_ALREADY_BOOKED: 'You already booked the table in this time range',
+    LOCATION_NOT_FOUND: 'Location not found!',
+    ACCESS_TOKEN_REQUIRED: 'accessToken is required!',
+    EMAIL_NOT_RETURNED: 'Email was not returned by social network',
+    IMAGE_MISSING: 'Invalid image',
 };

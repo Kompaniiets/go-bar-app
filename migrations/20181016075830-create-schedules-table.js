@@ -12,8 +12,8 @@ module.exports = {
               createdAt DATETIME(3) DEFAULT NULL,
               updatedAt DATETIME(3) DEFAULT NULL,
               PRIMARY KEY (id),
-              INDEX IdxScheduleLocation (locationId ASC),
-              CONSTRAINT FkScheduleLocation
+              INDEX IdxLocationSchedule (locationId ASC),
+              CONSTRAINT FkLocationSchedule
                 FOREIGN KEY (locationId)
                 REFERENCES locations (id)
                 ON DELETE CASCADE

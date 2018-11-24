@@ -1,3 +1,5 @@
+const CONSTANTS = require('../../../constants');
+
 module.exports = () => {
     function base(data) {
         function resStructure(item) {
@@ -9,20 +11,50 @@ module.exports = () => {
                 lat: item.lat,
                 lng: item.lng,
                 createdAt: item.createdAt,
-                updatedAt: item.updatedAt
+                updatedAt: item.updatedAt,
+                tables: !item.bookedTables ? [] : new Array(item.schedule.numberOfTables).fill({})
             };
 
+            if (item.bar) {
+                location.user = {
+                    id: item.bar.id,
+                    email: item.bar.email,
+                    firstName: item.bar.firstName,
+                    lastName: item.bar.lastName,
+                    barName: item.bar.barName,
+                    phone: item.bar.phone,
+                    avatarUrl: item.bar.imageId ? `${CONSTANTS.S3.BASE_PATH}${item.bar.image.url}` : '',
+                };
+            }
+
             if (item.schedule) {
-                location.opensIn = item.schedule.opensIn;
-                location.closesIn = item.schedule.closesIn;
-                location.numberOfTables = item.schedule.numberOfTables;
+                location.schedule = {
+                    id: item.schedule.id,
+                    locationId: item.schedule.locationId,
+                    opensIn: item.schedule.opensIn,
+                    closesIn: item.schedule.closesIn,
+                    numberOfTables: item.schedule.numberOfTables,
+                    createdAt: item.schedule.createdAt,
+                };
+            }
+
+            if (item.bookedTables && item.bookedTables.length) {
+                location.tables = item.bookedTables.map(i => ({
+                    userId: i.userId,
+                    startAt: i.startAt,
+                    endAt: i.endAt
+                }));
+
+                if (location.tables.length < item.schedule.numberOfTables) {
+                    location.tables = location.tables.concat(new Array(item.schedule.numberOfTables - location.tables.length).fill({}));
+                }
             }
 
             return location;
         }
 
         if (Array.isArray(data)) {
-            return data.map(user => resStructure(user));
+            return data.map(item => resStructure(item));
         }
 
         return resStructure(data);
