@@ -172,11 +172,13 @@ class BarsMiddleware {
                     userId: req.user.id,
                     locationId: req.barId,
                 },
-            }).then((result) => {
-            if (result)
-                return next(ErrorFactory.conflictError(CONSTANTS.ERROR_MESSAGES.TABLE_ALREADY_BOOKED));
-            return next();
-        }).catch(next);
+            })
+            .then((result) => {
+                if (result)
+                    return next(ErrorFactory.conflictError(CONSTANTS.ERROR_MESSAGES.TABLE_ALREADY_BOOKED));
+                return next();
+            })
+            .catch(next);
     }
 
     static saveAvatar(req, res, next) {

@@ -11,6 +11,7 @@ class BarsController extends Controller {
             this.middlewares.common.sendResponse
         ];
         this.getBarInfo = [
+            this.validator.bars.barInfo,
             this.setParamsForQuery,
             this.middlewares.bars.getSingleBar,
             this.middlewares.bars.getBookedTables,
@@ -18,6 +19,7 @@ class BarsController extends Controller {
             this.middlewares.common.sendResponse
         ];
         this.bookTable = [
+            this.validator.bars.book,
             this.setBodyForQuery,
             this.middlewares.bars.checkAlreadyBooked,
             this.middlewares.bars.getSingleBar,
