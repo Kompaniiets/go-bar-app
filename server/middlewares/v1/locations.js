@@ -99,7 +99,7 @@ class LocationsMiddleware {
      * @param next
      */
     static getLocationsList(req, res, next) {
-        Models.locations.findAll({
+        Models.locations.findAndCountAll({
             where: {
                 userId: req.user.id
             },
@@ -108,9 +108,12 @@ class LocationsMiddleware {
                     model: Models.schedules,
                     required: false,
                 }
-            ]
+            ],
+            limit: req.query.limit,
+            offset: req.query.offset
         }).then((locations) => {
-            req.locationModel = locations;
+            req.locationModel = locations.rows;
+            req.locationModel.count = locations.count;
             return next();
         }).catch(next);
     }

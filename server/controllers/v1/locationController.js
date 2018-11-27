@@ -4,6 +4,7 @@ class LocationsController extends Controller {
     constructor(version) {
         super(version);
         this.getLocation = [
+            this.middlewares.common.addPagingQuery,
             this.middlewares.locations.getLocationsList,
             this.middlewares.locations.basicResponse,
             this.middlewares.common.sendResponse
