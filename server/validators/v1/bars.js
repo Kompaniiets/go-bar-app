@@ -19,6 +19,8 @@ class BarsValidator extends BaseValidator {
 
     static book(req, res, next) {
         super.validate({
+            id: Joi.number()
+                .required(),
             date: Joi.string()
                 .required(),
             duration: Joi.string()
