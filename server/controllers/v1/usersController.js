@@ -1,5 +1,4 @@
 const Controller = require('./../../utils/controller');
-const ErrorFactory = require('./../../utils/errors');
 const fileUploader = require('./../../utils/fileUploader/upload');
 
 class UsersController extends Controller {
@@ -7,7 +6,7 @@ class UsersController extends Controller {
         super(version);
         this.test = [this.testAction];
         this.signup = [
-            this.validateSignup,
+            this.validator.users.registerUser,
             this.middlewares.users.encryptPassword,
             this.middlewares.users.saveUser,
             this.middlewares.users.findUserByEmail,
@@ -54,17 +53,6 @@ class UsersController extends Controller {
             this.middlewares.users.basicResponse,
             this.middlewares.common.sendResponse
         ];
-    }
-
-    validateSignup(req, res, next) {
-        if (req.body.isBar === false) {
-            return this.validator.users.registerUser(req, res, next);
-        }
-        if (req.body.isBar === true) {
-            return this.validator.users.registerBar(req, res, next);
-        }
-
-        return next(ErrorFactory.validationError('isBar flag missing!'));
     }
 
     /**
